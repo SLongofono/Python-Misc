@@ -1,5 +1,7 @@
-def timed_func(f, args=(), kwargs={}, timeout=30, default=None, errormsg="Timeout error"):
-
+def timed_func(f, args=(), kwargs=None, timeout=30, default=None, errormsg="Timeout error"):
+	# Since kwargs are mutable, assume they don't exist via optional arguments.  If they do in fact exist,
+	# they will exist in this context and be assigned.  Otherwise, set to an empty dict and proceed.
+	kwargs = kwargs or {}
 	import signal
 	class TimeoutError(Exception):
 		pass
