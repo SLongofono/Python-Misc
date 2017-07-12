@@ -43,5 +43,5 @@ def andever(a,b):
 			return result
 
 # Test
-print timed_func(forever, timeout=2, default="no response", errormsg="failed to update")
-print timed_func(andever, (1,2), timeout=5, default=-1, errormsg="computation timeout")
+print(timed_func(forever, timeout=2, default="no response", errormsg="failed to update"))
+print(timed_func(andever, (1,2), timeout=5, default=-1, errormsg="computation timeout"))
