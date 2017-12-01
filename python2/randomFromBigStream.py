@@ -35,7 +35,7 @@ def OMGSOMANYELEMENTS(ls):
   retval = None
   
   # We will eventually visit each element in the stream, but only store one at a time
-  for i, e in ls:
+  for i, e in enumerate(ls):
     
     # Make the random selection given the known number of elements i+1.
     # Using the second deck analogy above, 1 is the ace of spades.
