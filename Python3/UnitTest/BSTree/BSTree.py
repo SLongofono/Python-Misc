@@ -1,3 +1,13 @@
+"""
+Credit to user 200_success on the Code Review Stack Exchange for the BST implementation.
+Retrieved from https://codereview.stackexchange.com/questions/175856/python-binary-search-tree, 12/3/2017
+
+As an aside, Python developers worked very hard to make the dictionary and set data types performant, so
+this sort of data structure might not be necessary in many use cases.  Both use hash tables, and enjoy
+O(1) lookup
+
+"""
+
 class BSTNode:
     def __init__(self, value):
         self.value = value
