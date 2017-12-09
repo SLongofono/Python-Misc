@@ -1,3 +1,18 @@
+
+"""
+
+This demonstrates a simple Trie or prefix-tree data structure for storing a
+dictionary or other ordered data type.  Linear lookup is fast if the average
+sequence length is small.  Adding is similar time complexity.  Space
+complexity is a little more nebulous, as it will depend on the specific
+dictionary in use.
+
+This is an interesting way to solve a boggle board.  Using a breadth-first
+traversal of the board, all valid sequences can be checking in short order.
+
+"""
+VERBOSE = False
+
 class Node():
     def __init__(self):
         self.endpoint = False
@@ -10,41 +25,61 @@ class Trie():
 
         with open(dictFile, 'r') as infile:
             word = infile.readline()
-            while word:
-                word = word[:-1].lower()
-                print("Adding {}".format(word))
-                word = infile.readline()
+            while len(word) > 0:
+                if VERBOSE:
+                    print("Adding {}".format(self.clean(word)))
                 self.add(word)
+                word = infile.readline()
+
+    def clean(self, word):
+        ret = word.strip('\n')
+        ret = ret.lower()
+        return ret
 
     def find(self, word):
-        s = word.lower()
+        s = self.clean(word)
         curr = self.root
         last = len(s) - 1
-        for letter, i in enumerate(s):
+        for i, letter in enumerate(s):
             if letter in curr.dict:
                 curr = curr.dict[letter]
+                if i == last:
+                    return curr.endpoint
             else:
-                return False
-        # Need to check if we are in the middle of a known word.
-        return curr.endpoint
+                if VERBOSE:
+                    print("Broken at {}".format(s[:i+1]))
+                break
+
+        return False
 
     def add(self, word):
+        word = self.clean(word)
         curr = self.root
         last = len(word) -1
-        for letter, i in enumerate(word):
+        for i, letter in enumerate(word):
             if letter in curr.dict:
                 curr = curr.dict[letter]
+                if i == last:
+                    # This is a valid stopping point, so set a flag
+                    curr.endpoint = True
             else:
                 newNode = Node()
                 curr.dict[letter] = newNode
                 curr = curr.dict[letter]
-            if i == last:
-                # This is a valid stopping point, so set a flag
-                curr.endpoint = True
+                if i == last:
+                    # This is a valid stopping point, so set a flag
+                    curr.endpoint = True
 
 if __name__ == "__main__":
-    myTrie = Trie("en_US.txt")
-    print("'Computer' is in dictionary: {}".format(myTrie.find("Computer")))
-    print("'it' is in dictionary: {}".format(myTrie.find("it")))
-    print("'foo' is in dictionary: {}".format(myTrie.find("foo")))
-    print("'bar' is in dictionary: {}".format(myTrie.find("bar")))
+    myTrie = Trie("words")
+
+    testWords = ["Code", "it", "navigation", "fqwexo", "baz", "aeiou",
+                 "apple", "biplane", "moose", "goose", "pond", "scum",
+                 "garbage", "windows", "portal", "video", "compression",
+                 "injury", "insult", "negative", "positive", "circuit",
+                 "dobby", "theelf", "harrypotter"
+                ]
+
+    for word in testWords:
+        print("{:<20} is in dictionary: {}".format(word, myTrie.find(word)))
+
